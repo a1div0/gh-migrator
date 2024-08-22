@@ -18,9 +18,12 @@ class Downloader:
 
         i = 0
         while i < self.retry_timeout:
-            response = requests.get(url, headers=headers, cookies=self.cookies)
-            if response.status_code == 200:
-                return response
+            try:
+                response = requests.get(url, headers=headers, cookies=self.cookies)
+                if response.status_code == 200:
+                    return response
+            except:
+                print("")
 
             i += self.retry_sleep
             print("Get retry...")
