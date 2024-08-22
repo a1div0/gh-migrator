@@ -50,7 +50,7 @@ def main():
 
     for repo in repos:
         owner, repo_name = repo.split('/')
-        dest_path = "database/" + repo_name
+        dest_path = f"database/{repo_name}/"
         print("------------------------------------------------------")
         print(f"owner = {owner}")
         print(f"repo_name = {repo_name}")
