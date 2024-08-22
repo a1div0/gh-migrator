@@ -9,6 +9,9 @@ class Downloader:
         self.cookies = {
             "user_session": user_session
         }
+        self.session = requests.Session()
+        self.session.max_redirects = 3
+        self.timeout = 60
 
     def download_object(self, url):
         headers = {
@@ -19,7 +22,7 @@ class Downloader:
         i = 0
         while i < self.retry_timeout:
             try:
-                response = requests.get(url, headers=headers, cookies=self.cookies)
+                response = self.session.get(url, headers=headers, cookies=self.cookies, timeout=self.timeout)
                 if response.status_code == 200:
                     return response
             except:
@@ -38,7 +41,7 @@ class Downloader:
         }
 
         try:
-            response = requests.get(url, headers=headers, cookies=self.cookies)
+            response = self.session.get(url, headers=headers, cookies=self.cookies, timeout=self.timeout)
             if response.status_code == 200:
                 return response.content
             else:
