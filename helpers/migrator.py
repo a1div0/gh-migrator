@@ -32,7 +32,8 @@ class Migrator:
 
     def migrate_attachment(self, declare_filename, url):
         content = self.downloader.download_file(url)
-        self.attach_saver.save_attach(declare_filename, url, content)
+        if content is not None:
+            self.attach_saver.save_attach(declare_filename, url, content)
 
     def migrate_attachments(self, attachments_info):
         for attachment_info in attachments_info:

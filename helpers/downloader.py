@@ -34,8 +34,11 @@ class Downloader:
             "Accept": "application/vnd.github.v3.raw"
         }
 
-        response = requests.get(url, headers=headers, cookies=self.cookies)
-        if response.status_code == 200:
-            return response.content
-        else:
-            return f"Response status = {response.status_code}".encode('utf-8')
+        try:
+            response = requests.get(url, headers=headers, cookies=self.cookies)
+            if response.status_code == 200:
+                return response.content
+            else:
+                return None
+        except:
+            return None
