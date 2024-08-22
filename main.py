@@ -18,10 +18,6 @@ def main():
 
     # Парсинг аргументов
     args = parser.parse_args()
-    dest_path = args.dest_path
-
-    attach_saver = Saver(dest_path + "attachments/")
-    object_saver = Saver(dest_path)
 
     token = os.getenv("GITHUB_API_TOKEN")
     if token is None:
@@ -36,7 +32,11 @@ def main():
 
     downloader = Downloader(token, user_session)
 
+    dest_path = args.dest_path
+    attach_saver = Saver(dest_path + "attachments/")
+    object_saver = Saver(dest_path)
     migrator = Migrator(downloader, object_saver, attach_saver)
+
     migrator.migrate_repo_issues(args.owner, args.repo)
 
     attach_saver.save_correspondence_table()
