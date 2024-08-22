@@ -32,14 +32,37 @@ def main():
 
     downloader = Downloader(token, user_session)
 
-    dest_path = args.dest_path
-    attach_saver = Saver(dest_path + "attachments/")
-    object_saver = Saver(dest_path)
-    migrator = Migrator(downloader, object_saver, attach_saver)
+    # Список репозиториев
+    repos = [
+        "tarantool/crud",
+        "tarantool/crud-ee",
+        "tarantool/expirationd",
+        "tarantool/expirationd-ee",
+        "tarantool/migrations",
+        "tarantool/migrations-ee",
+        "tarantool/tt",
+        "tarantool/tt-ee",
+        "tarantool/dictionary",
+        "tarantool/halykbank",
+        "tarantool/spimex-server",
+        "tarantool/megafon-cdi"
+    ]
 
-    migrator.migrate_repo_issues(args.owner, args.repo)
+    for repo in repos:
+        owner, repo_name = repo.split('/')
+        dest_path = "database/" + repo_name
+        print("------------------------------------------------------")
+        print(f"owner = {owner}")
+        print(f"repo_name = {repo_name}")
+        print(f"dest_path = {dest_path}")
 
-    attach_saver.save_correspondence_table()
+        attach_saver = Saver(dest_path + "attachments/")
+        object_saver = Saver(dest_path)
+        migrator = Migrator(downloader, object_saver, attach_saver)
+
+        migrator.migrate_repo_issues(args.owner, args.repo)
+
+        attach_saver.save_correspondence_table()
 
     print("Done")
 
