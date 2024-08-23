@@ -13,8 +13,7 @@ def main():
 
     # Определение аргументов
     parser.add_argument("dest_path", type=str, help="Destination folder")
-    parser.add_argument("owner", type=str, help="Repository owner")
-    parser.add_argument("repo", type=str, help="Repository name")
+    parser.add_argument("owner_repo", type=str, help="Repository owner / Repository name")
 
     # Парсинг аргументов
     args = parser.parse_args()
@@ -32,12 +31,18 @@ def main():
 
     downloader = Downloader(token, user_session)
 
-    dest_path = args.dest_path
+    owner, repo_name = args.owner_repo.split('/')
+    dest_path = f"{args.dest_path}/{owner}/{repo_name}/"
+    print("------------------------------------------------------")
+    print(f"owner = {owner}")
+    print(f"repo_name = {repo_name}")
+    print(f"dest_path = {dest_path}")
+
     attach_saver = Saver(dest_path + "attachments/")
     object_saver = Saver(dest_path)
     migrator = Migrator(downloader, object_saver, attach_saver)
 
-    migrator.migrate_repo_issues(args.owner, args.repo)
+    migrator.migrate_repo_issues(owner, repo_name)
 
     attach_saver.save_correspondence_table()
 

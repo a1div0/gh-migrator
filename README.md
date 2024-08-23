@@ -11,11 +11,11 @@
 
 Далее вызов:
 ```shell
-python3 main.py <папка_куда_складывать> <repo_owner> <repo_name>
+python3 main.py <папка_куда_складывать> <repo_owner>/<repo_name>
 ```
 
 Пример вызова:
 ```shell
 GITHUB_API_TOKEN=too GITHUB_USER_SESSION=foo \
-    python3 main.py database/tarantooldb/ tarantool tarantooldb
+    python3 main.py database tarantool/tarantooldb
 ```
