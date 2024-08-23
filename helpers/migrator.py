@@ -130,3 +130,8 @@ class Migrator:
             issue_number = reduced_number + 1
             self.migrate_issue_tree(issue_number, owner, repo)
 
+    def migrate_repo(self, owner, repo):
+        response = self.downloader.download_repo_zip_v2(self.object_saver.workdir, owner, repo)
+
+        self.migrate_repo_issues(owner, repo)
+

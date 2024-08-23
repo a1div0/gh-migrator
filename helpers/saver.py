@@ -36,6 +36,13 @@ class Saver:
         with open(save_filename, "w", encoding="utf-8") as file:
             file.write(text)
 
+    def save_stream(self, response):
+        save_filename = f"{self.workdir}repo.zip"
+        with open(save_filename, 'wb') as file:
+            for chunk in response.iter_content(chunk_size=1024):
+                file.write(chunk)
+        print(f"Repository zip downloaded successfully.")
+
     def save_correspondence_table(self):
         csv_filename = os.path.join(self.workdir, "!correspondence_table.csv")
         with open(csv_filename, mode='w', newline='', encoding='utf-8') as csvfile:

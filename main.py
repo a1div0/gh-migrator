@@ -42,7 +42,7 @@ def main():
     object_saver = Saver(dest_path)
     migrator = Migrator(downloader, object_saver, attach_saver)
 
-    migrator.migrate_repo_issues(owner, repo_name)
+    migrator.migrate_repo(owner, repo_name)
 
     attach_saver.save_correspondence_table()
 

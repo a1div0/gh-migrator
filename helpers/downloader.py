@@ -1,5 +1,8 @@
 import time
 import requests
+import subprocess
+import os
+import shutil
 
 class Downloader:
     def __init__(self, token, user_session):
@@ -133,3 +136,48 @@ class Downloader:
             time.sleep(self.retry_sleep)
 
         raise "Что-то пошло не так... TODO"
+
+    def download_repo_zip(self, owner, repo):
+        url = f'https://api.github.com/repos/{owner}/{repo}/zipball'
+        headers = {
+            "Authorization": f"token {self.token}"
+        }
+
+        i = 0
+        while i < self.retry_timeout:
+            try:
+                response = requests.get(url, headers=headers, stream=True)
+                if response.status_code == 200:
+                    return response
+            except:
+                print("")
+
+            i += self.retry_sleep
+            print("Get retry...")
+            time.sleep(self.retry_sleep)
+
+        raise "Что-то пошло не так... TODO"
+
+    def download_repo_zip_v2(self, work_dir, owner, repo):
+        temp_dir = work_dir + "temp_repo/"
+        if os.path.exists(temp_dir):
+            shutil.rmtree(temp_dir)
+        os.makedirs(temp_dir)
+        repo_url = f"https://{self.token}@github.com/{owner}/{repo}.git"
+
+        # Формируем команду для клонирования репозитория
+        clone_command = [
+            "git", "clone", repo_url, temp_dir
+        ]
+
+        # Выполняем команду клонирования
+        result = subprocess.run(clone_command, check=True)
+        if result.returncode != 0:
+            raise "Что-то пошло не так... TODO"
+
+        # Создаем архив из клонированного репозитория
+        archive_name = work_dir + "repo"
+        shutil.make_archive(archive_name, 'zip', temp_dir)
+
+        # Удаляем временную директорию
+        shutil.rmtree(temp_dir)
